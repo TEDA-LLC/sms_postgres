@@ -1,0 +1,22 @@
+server:
+  port: 77
+spring:
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://185.185.80.245/mix
+    password: turgun1970
+    username: admin
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: never
+  main:
+    lazy-initialization: true

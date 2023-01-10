@@ -1,7 +1,5 @@
 package com.example.sms_postgres.controller;
 
-import com.example.sms_postgres.entity.ApiResponse;
-import com.example.sms_postgres.entity.Message;
 import com.example.sms_postgres.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +15,12 @@ public class MessageController {
 
     @GetMapping
     public ResponseEntity<?> getAll(){
-        ApiResponse<List<Message>> response =  messageService.getAll();
-        return ResponseEntity.status(response.getStatus()).body(response);
+        return ResponseEntity.ok(messageService.getAll());
     }
 
     @GetMapping("/status")
     public ResponseEntity<?> getAllByStatus(@RequestParam int status){
-        ApiResponse<List<Message>> response =  messageService.getAllByStatus(status);
-        return ResponseEntity.status(response.getStatus()).body(response);
+        return ResponseEntity.ok(messageService.getAllByStatus(status));
     }
 
     @PutMapping

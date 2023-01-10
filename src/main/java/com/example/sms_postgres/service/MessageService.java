@@ -1,27 +1,20 @@
 package com.example.sms_postgres.service;
 
-import com.example.sms_postgres.entity.ApiResponse;
 import com.example.sms_postgres.entity.Message;
 import com.example.sms_postgres.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MessageService {
     private final MessageRepository messageRepository;
 
-    public ApiResponse<List<Message>> getAll() {
-        List<Message> list = messageRepository.findAll();
-        return ApiResponse.<List<Message>>builder().
-                status(200).
-                success(true).
-                message("Here").
-                data(list).
-                build();
+    public List<Message> getAll() {
+        return messageRepository.findAll();
     }
 
 //    public ApiResponse<Message> getOne(Long id) {
@@ -112,14 +105,15 @@ public class MessageService {
 //                build();
 //    }
 
-    public ApiResponse<List<Message>> getAllByStatus(int status) {
+    public List<Message> getAllByStatus(int status) {
         List<Message> messageList = messageRepository.findAllByFlag(status);
-        return ApiResponse.<List<Message>>builder().
-                status(200).
-                success(true).
-                message("Here").
-                data(messageList).
-                build();
+        LocalDateTime dateTime = LocalDateTime.now();
+        for (Message message : messageList) {
+            message.setSana(dateTime);
+            message.setFlag(2);
+        }
+        return messageRepository.saveAll(messageList);
+
     }
 
     public boolean editStatus(List<Integer> list) {

@@ -1,5 +1,6 @@
 package com.example.sms_postgres.service;
 
+import com.example.sms_postgres.entity.ApiResponse;
 import com.example.sms_postgres.entity.Message;
 import com.example.sms_postgres.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,15 @@ import java.util.List;
 public class MessageService {
     private final MessageRepository messageRepository;
 
-    public List<Message> getAll() {
-        return messageRepository.findAll();
+
+    public ApiResponse<List<Message>> getAll() {
+        List<Message> list = messageRepository.findAll();
+        return ApiResponse.<List<Message>>builder().
+                status(200).
+                success(true).
+                message("Here").
+                data(list).
+                build();
     }
 
 //    public ApiResponse<Message> getOne(Long id) {
@@ -105,16 +113,30 @@ public class MessageService {
 //                build();
 //    }
 
-    public List<Message> getAllByStatus(int status) {
-        List<Message> messageList = messageRepository.findAllByFlag(status);
-        LocalDateTime dateTime = LocalDateTime.now();
-        for (Message message : messageList) {
-            message.setSana(dateTime);
-            message.setFlag(2);
-        }
-        return messageRepository.saveAll(messageList);
+    public ApiResponse<List<Message>> getAllByStatus(int status) {
 
+        ApiResponse<List<Message>> response = new ApiResponse<>();
+        if (status > 3 || status < 0) {
+            response.setMessage("Flag not supported!!!");
+            response.setStatus(400);
+            response.setSuccess(false);
+            return response;
+        }
+        List<Message> list = messageRepository.findAllByFlag(status);
+        LocalDateTime dateTime = LocalDateTime.now();
+        for (Message message : list) {
+            message.setFlag(2);
+            message.setSana(dateTime);
+        }
+        messageRepository.saveAll(list);
+
+        response.setMessage("Here!!!");
+        response.setStatus(200);
+        response.setSuccess(true);
+        response.setData(list);
+        return response;
     }
+
 
     public boolean editStatus(List<Integer> list) {
         List<Message> messageList = messageRepository.findAllById(list);

@@ -7,16 +7,16 @@ spring:
       max-request-size: 15MB
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://185.185.80.245/mix
+    url: jdbc:postgresql://185.185.80.245/sms_test
     password: Turgun1970$
     username: admin
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     defer-datasource-initialization: true
   sql:
     init:
-      mode: never
+      mode: always
   main:
     lazy-initialization: true

@@ -24,7 +24,7 @@ public class MessageController {
     }
 
     @PutMapping
-    public ResponseEntity<?> edit(@RequestParam List<Integer> list){
+    public ResponseEntity<?> edit(@RequestBody List<Integer> list){
         return ResponseEntity.ok(messageService.editStatus(list));
     }
 

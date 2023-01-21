@@ -125,8 +125,10 @@ public class MessageService {
         List<Message> list = messageRepository.findAllByFlag(status);
         LocalDateTime dateTime = LocalDateTime.now();
         for (Message message : list) {
-            message.setFlag(2);
-            message.setSana(dateTime);
+            if (message.getFlag() != 3) {
+                message.setFlag(2);
+                message.setSana(dateTime);
+            }
         }
         messageRepository.saveAll(list);
 
@@ -139,11 +141,15 @@ public class MessageService {
 
 
     public boolean editStatus(List<Integer> list) {
-        List<Message> messageList = messageRepository.findAllById(list);
-        for (Message message : messageList) {
-            message.setFlag(3);
+        try {
+            List<Message> messageList = messageRepository.findAllById(list);
+            for (Message message : messageList) {
+                message.setFlag(3);
+            }
+            messageRepository.saveAll(messageList);
+        } catch (Exception e) {
+            return false;
         }
-        messageRepository.saveAll(messageList);
         return true;
     }
 }
